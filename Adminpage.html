@@ -1,0 +1,1537 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FredzEditz - Admin Panel</title>
+
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    body {
+      font-family: 'Inter', system-ui, sans-serif;
+      background:
+        radial-gradient(circle at top left, rgba(59,130,246,.12), transparent 35%),
+        linear-gradient(135deg, #0b1120 0%, #111827 100%);
+      color: #fff;
+      min-height: 100vh;
+    }
+
+    button,
+    input,
+    textarea,
+    select {
+      font-family: inherit;
+    }
+
+    .container {
+      width: min(1150px, 100%);
+      margin: 0 auto;
+      padding: 25px;
+    }
+
+    /* =========================
+       LOGIN
+    ========================= */
+
+    .login-screen {
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .login-box {
+      width: 100%;
+      max-width: 410px;
+      padding: 38px;
+      background: rgba(255,255,255,.055);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 18px;
+      backdrop-filter: blur(20px);
+      box-shadow: 0 25px 80px rgba(0,0,0,.35);
+    }
+
+    .login-logo {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .login-logo h1 {
+      font-size: 1.8rem;
+      margin-bottom: 7px;
+    }
+
+    .login-logo p {
+      color: #94a3b8;
+      font-size: .9rem;
+    }
+
+    /* =========================
+       DASHBOARD
+    ========================= */
+
+    .dashboard {
+      display: none;
+    
+    }
+
+    .header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 20px;
+      padding-bottom: 22px;
+      margin-bottom: 28px;
+      border-bottom: 1px solid rgba(255,255,255,.08);
+    }
+
+    .header-left h1 {
+      font-size: 1.8rem;
+      margin-bottom: 5px;
+    }
+
+    .header-left p {
+      color: #94a3b8;
+      font-size: .9rem;
+    }
+
+    .logout-btn {
+      padding: 10px 18px;
+      background: rgba(255,59,48,.1);
+      border: 1px solid rgba(255,59,48,.35);
+      color: #ff6b63;
+      border-radius: 9px;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .logout-btn:hover {
+      background: rgba(255,59,48,.18);
+    }
+
+    /* =========================
+       MESSAGES
+    ========================= */
+
+    .success-msg,
+    .error-msg {
+      padding: 13px 15px;
+      border-radius: 10px;
+      margin-bottom: 20px;
+      display: none;
+      font-size: .9rem;
+    }
+
+    .success-msg {
+      background: rgba(16,185,129,.1);
+      border: 1px solid rgba(16,185,129,.35);
+      color: #34d399;
+    }
+
+    .error-msg {
+      background: rgba(255,59,48,.1);
+      border: 1px solid rgba(255,59,48,.35);
+      color: #ff6b63;
+    }
+
+    /* =========================
+       FORM CARD
+    ========================= */
+
+    .panel {
+      background: rgba(255,255,255,.045);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 16px;
+      padding: 28px;
+      margin-bottom: 28px;
+      backdrop-filter: blur(14px);
+    }
+
+    .panel-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 15px;
+      margin-bottom: 24px;
+    }
+
+    .panel-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .panel-header span {
+      color: #64748b;
+      font-size: .8rem;
+    }
+
+    .edit-note {
+      display: none;
+      padding: 13px 15px;
+      margin-bottom: 22px;
+      background: rgba(59,130,246,.08);
+      border: 1px solid rgba(59,130,246,.25);
+      border-radius: 10px;
+      color: #93c5fd;
+      font-size: .88rem;
+    }
+
+    .upload-form {
+      display: grid;
+      gap: 18px;
+    }
+
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 18px;
+    }
+
+    .form-group label {
+      display: block;
+      margin-bottom: 7px;
+      font-size: .85rem;
+      font-weight: 600;
+      color: #cbd5e1;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 12px 13px;
+      background: rgba(15,23,42,.7);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 9px;
+      color: white;
+      font-size: .92rem;
+      transition: .2s;
+    }
+
+    .form-group textarea {
+      resize: vertical;
+      min-height: 95px;
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      outline: none;
+      border-color: rgba(59,130,246,.7);
+      box-shadow: 0 0 0 3px rgba(59,130,246,.08);
+    }
+
+    .form-group select option {
+      background: #0f172a;
+      color: white;
+    }
+
+    .form-note {
+      color: #64748b;
+      font-size: .78rem;
+      margin-top: 6px;
+    }
+
+    .form-actions {
+      display: flex;
+      gap: 10px;
+      margin-top: 3px;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 12px 18px;
+      background: linear-gradient(90deg, #2563eb, #3b82f6);
+      border: none;
+      border-radius: 9px;
+      color: white;
+      font-weight: 600;
+      cursor: pointer;
+      transition: .2s;
+    }
+
+    .btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 8px 25px rgba(59,130,246,.25);
+    }
+
+    .cancel-btn {
+      flex: 0 0 auto;
+      padding: 12px 20px;
+      background: rgba(255,255,255,.06);
+      border: 1px solid rgba(255,255,255,.1);
+      border-radius: 9px;
+      color: #cbd5e1;
+      cursor: pointer;
+    }
+
+    .cancel-btn:hover {
+      background: rgba(255,255,255,.1);
+    }
+
+    /* =========================
+       PROJECTS
+    ========================= */
+
+    .projects-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+    }
+
+    .projects-header h2 {
+      font-size: 1.25rem;
+    }
+
+    .project-count {
+      padding: 5px 10px;
+      border-radius: 20px;
+      background: rgba(59,130,246,.1);
+      color: #60a5fa;
+      font-size: .78rem;
+    }
+
+    .projects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 15px;
+    }
+
+    .project-card {
+      display: grid;
+      grid-template-columns: 85px 1fr auto;
+      align-items: center;
+      gap: 16px;
+      padding: 15px;
+      background: rgba(255,255,255,.035);
+      border: 1px solid rgba(255,255,255,.07);
+      border-radius: 13px;
+      transition: .2s;
+    }
+
+    .project-card:hover {
+      border-color: rgba(59,130,246,.25);
+      background: rgba(255,255,255,.05);
+    }
+
+    .project-thumb {
+      width: 85px;
+      height: 65px;
+      border-radius: 8px;
+      object-fit: cover;
+      background: #1e293b;
+    }
+
+    .project-info {
+      min-width: 0;
+    }
+
+    .project-title {
+      font-size: .95rem;
+      font-weight: 600;
+      margin-bottom: 5px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    .project-category {
+      display: inline-block;
+      padding: 3px 7px;
+      background: rgba(59,130,246,.1);
+      color: #60a5fa;
+      border-radius: 5px;
+      font-size: .7rem;
+      margin-bottom: 7px;
+    }
+
+    .project-url {
+      display: block;
+      color: #64748b;
+      font-size: .72rem;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      max-width: 300px;
+    }
+
+    .project-actions {
+      display: flex;
+      gap: 6px;
+    }
+
+    .edit-btn,
+    .delete-btn {
+      padding: 8px 10px;
+      border-radius: 7px;
+      cursor: pointer;
+      font-size: .78rem;
+      transition: .2s;
+    }
+
+    .edit-btn {
+      background: rgba(59,130,246,.1);
+      border: 1px solid rgba(59,130,246,.25);
+      color: #60a5fa;
+    }
+
+    .edit-btn:hover {
+      background: rgba(59,130,246,.2);
+    }
+
+    .delete-btn {
+      background: rgba(255,59,48,.08);
+      border: 1px solid rgba(255,59,48,.2);
+      color: #ff6b63;
+    }
+
+    .delete-btn:hover {
+      background: rgba(255,59,48,.16);
+    }
+
+    .empty-state {
+      text-align: center;
+      padding: 45px 20px;
+      color: #64748b;
+    }
+
+    .empty-state-icon {
+      font-size: 2rem;
+      margin-bottom: 10px;
+    }
+
+    /* =========================
+       MOBILE
+    ========================= */
+
+    @media (max-width: 850px) {
+
+      .projects-grid {
+        grid-template-columns: 1fr;
+      }
+
+    }
+
+    @media (max-width: 600px) {
+
+      .container {
+        padding: 15px;
+      }
+
+      .header {
+        align-items: flex-start;
+      }
+
+      .header-left h1 {
+        font-size: 1.4rem;
+      }
+
+      .logout-btn {
+        padding: 8px 13px;
+        font-size: .8rem;
+      }
+
+      .panel {
+        padding: 20px;
+        border-radius: 13px;
+      }
+
+      .form-row {
+        grid-template-columns: 1fr;
+      }
+
+      .form-actions {
+        flex-direction: column;
+      }
+
+      .cancel-btn {
+        width: 100%;
+      }
+
+      .project-card {
+        grid-template-columns: 65px 1fr;
+        gap: 12px;
+      }
+
+      .project-thumb {
+        width: 65px;
+        height: 55px;
+      }
+
+      .project-actions {
+        grid-column: 1 / -1;
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        margin-top: 2px;
+      }
+
+      .edit-btn,
+      .delete-btn {
+        padding: 9px;
+      }
+
+      .project-url {
+        max-width: 100%;
+      }
+    }
+  </style>
+</head>
+
+
+<body>
+
+  <!-- =========================
+       LOGIN
+  ========================== -->
+
+  <div class="login-screen" id="loginScreen">
+
+    <div class="login-box">
+
+      <div class="login-logo">
+        <h1>FredzEditz</h1>
+        <p>Admin Project Manager</p>
+      </div>
+
+      <form id="loginForm">
+
+        <div class="form-group">
+          <label for="password">Admin Password</label>
+
+          <input
+            type="password"
+            id="password"
+            required
+            placeholder="Enter password"
+          >
+        </div>
+
+        <button type="submit" class="btn">
+          Login
+        </button>
+
+      </form>
+
+    </div>
+
+  </div>
+
+
+  <!-- =========================
+       DASHBOARD
+  ========================== -->
+
+  <div class="dashboard" id="dashboard">
+
+    <div class="container">
+
+      <!-- HEADER -->
+
+      <div class="header">
+
+        <div class="header-left">
+
+          <h1>Project Manager</h1>
+
+          <p>Manage the projects displayed on your portfolio.</p>
+
+        </div>
+
+        <button class="logout-btn" id="logoutBtn">
+          Logout
+        </button>
+
+      </div>
+
+
+      <!-- MESSAGES -->
+
+      <div class="success-msg" id="successMsg"></div>
+      <div class="error-msg" id="errorMsg"></div>
+
+
+      <!-- =========================
+           ADD / EDIT
+      ========================== -->
+
+      <div class="panel">
+
+        <div class="panel-header">
+
+          <h2 id="formTitle">
+            Add New Project
+          </h2>
+
+          <span>
+            Portfolio Content
+          </span>
+
+        </div>
+
+
+        <div class="edit-note" id="editNote">
+          ✏️ Editing an existing project.
+          Make your changes and click
+          <strong>Update Project</strong>.
+        </div>
+
+
+        <form class="upload-form" id="uploadForm">
+
+          <div class="form-row">
+
+            <div class="form-group">
+
+              <label>Project Title *</label>
+
+              <input
+                type="text"
+                id="title"
+                required
+                placeholder="e.g. Steph Curry Edit"
+              >
+
+            </div>
+
+
+            <div class="form-group">
+
+              <label>Category *</label>
+
+              <select id="category" required>
+
+                <option value="">
+                  Select Category
+                </option>
+
+                <option value="Brand Edits">
+                  Brand Edits
+                </option>
+
+                <option value="Movie/Anime Edits">
+                  Movie/Anime Edits
+                </option>
+
+                <option value="Cinematic Edits">
+                  Cinematic Edits
+                </option>
+
+              </select>
+
+            </div>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Description</label>
+
+            <textarea
+              id="description"
+              rows="3"
+              placeholder="Describe the project..."
+            ></textarea>
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Video URL *</label>
+
+            <input
+              type="url"
+              id="videoUrl"
+              required
+              placeholder="https://youtube.com/..."
+            >
+
+          </div>
+
+
+          <div class="form-group">
+
+            <label>Custom Thumbnail URL</label>
+
+            <input
+              type="url"
+              id="thumbnailUrl"
+              placeholder="https://example.com/image.jpg"
+            >
+
+            <p class="form-note">
+              Leave empty if you want the portfolio to use its automatic thumbnail.
+            </p>
+
+          </div>
+
+
+          <div class="form-actions">
+
+            <button
+              type="submit"
+              class="btn"
+              id="submitBtn"
+            >
+              Add Project
+            </button>
+
+            <button
+              type="button"
+              class="cancel-btn"
+              id="cancelEditBtn"
+              style="display:none;"
+            >
+              Cancel Edit
+            </button>
+
+          </div>
+
+        </form>
+
+      </div>
+
+
+      <!-- =========================
+           PROJECT LIST
+      ========================== -->
+
+      <div class="panel">
+
+        <div class="projects-header">
+
+          <h2>Your Projects</h2>
+
+          <span
+            class="project-count"
+            id="projectCount"
+          >
+            0 Projects
+          </span>
+
+        </div>
+
+
+        <div
+          class="projects-grid"
+          id="projectsList"
+        >
+
+          <div class="empty-state">
+
+            <div class="empty-state-icon">
+              ⏳
+            </div>
+
+            Loading projects...
+
+          </div>
+
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+
+  <!-- SUPABASE -->
+
+  <script
+    src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm"
+  ></script>
+
+
+  <script type="module">
+
+    import {
+      createClient
+    } from 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2/+esm';
+
+
+    /* =========================
+       SUPABASE
+    ========================== */
+
+    const ADMIN_PASSWORD = 'freedom123';
+
+    const sb = createClient(
+
+      'https://ljvqcpzkegfzdoucfexw.supabase.co',
+
+      'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6ImxqdnFjcHprZWdmemRvdWNmZXh3Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODAzMTI5NTAsImV4cCI6MjA5NTg4ODk1MH0.rvRiKUq4gL5guYSimQMRqwUZwaxgP4B4QSVKUHqlXKM'
+
+    );
+
+
+    /* =========================
+       EDIT STATE
+    ========================== */
+
+    let editingProjectId = null;
+
+
+    /* =========================
+       LOGIN
+    ========================== */
+
+    document
+      .getElementById('loginForm')
+      .addEventListener('submit', (e) => {
+
+        e.preventDefault();
+
+        const password =
+          document.getElementById('password').value;
+
+        if (password === ADMIN_PASSWORD) {
+
+          localStorage.setItem(
+            'adminLoggedIn',
+            'true'
+          );
+
+          showDashboard();
+
+        } else {
+
+          alert('❌ Wrong password!');
+
+        }
+
+      });
+
+
+    /* =========================
+       LOGOUT
+    ========================== */
+
+    document
+      .getElementById('logoutBtn')
+      .addEventListener('click', () => {
+
+        localStorage.removeItem(
+          'adminLoggedIn'
+        );
+
+        document.getElementById(
+          'password'
+        ).value = '';
+
+        cancelEdit();
+
+        showLogin();
+
+      });
+
+
+    function showLogin() {
+
+      document.getElementById(
+        'loginScreen'
+      ).style.display = 'flex';
+
+      document.getElementById(
+        'dashboard'
+      ).style.display = 'none';
+
+    }
+
+
+    function showDashboard() {
+
+      document.getElementById(
+        'loginScreen'
+      ).style.display = 'none';
+
+      document.getElementById(
+        'dashboard'
+      ).style.display = 'block';
+
+      loadProjects();
+
+    }
+
+
+    /* =========================
+       ADD / UPDATE
+    ========================== */
+
+    document
+      .getElementById('uploadForm')
+      .addEventListener('submit', async (e) => {
+
+        e.preventDefault();
+
+
+        const title =
+          document
+            .getElementById('title')
+            .value
+            .trim();
+
+
+        const category =
+          document
+            .getElementById('category')
+            .value;
+
+
+        const description =
+          document
+            .getElementById('description')
+            .value
+            .trim();
+
+
+        const videoUrl =
+          document
+            .getElementById('videoUrl')
+            .value
+            .trim();
+
+
+        const thumbnailUrl =
+          document
+            .getElementById('thumbnailUrl')
+            .value
+            .trim();
+
+
+        if (!title || !category || !videoUrl) {
+
+          showError(
+            'Please fill all required fields.'
+          );
+
+          return;
+
+        }
+
+
+        try {
+
+          /* =========================
+             UPDATE
+          ========================== */
+
+          if (editingProjectId !== null) {
+
+            const {
+              error
+            } = await sb
+              .from('projects')
+              .update({
+
+                title,
+
+                category,
+
+                description,
+
+                video_url: videoUrl,
+
+                thumbnail_url:
+                  thumbnailUrl || null
+
+              })
+              .eq(
+                'id',
+                editingProjectId
+              );
+
+
+            if (error) throw error;
+
+
+            showSuccess(
+              '✓ Project updated successfully!'
+            );
+
+
+            cancelEdit();
+
+            loadProjects();
+
+          }
+
+
+          /* =========================
+             ADD
+          ========================== */
+
+          else {
+
+            const {
+              error
+            } = await sb
+              .from('projects')
+              .insert([{
+
+                title,
+
+                category,
+
+                description,
+
+                video_url: videoUrl,
+
+                thumbnail_url:
+                  thumbnailUrl || null
+
+              }]);
+
+
+            if (error) throw error;
+
+
+            showSuccess(
+              '✓ Project added successfully!'
+            );
+
+
+            document
+              .getElementById('uploadForm')
+              .reset();
+
+
+            loadProjects();
+
+          }
+
+
+        } catch (error) {
+
+          console.error(error);
+
+          showError(
+            'Error: ' + error.message
+          );
+
+        }
+
+      });
+
+
+    /* =========================
+       LOAD PROJECTS
+    ========================== */
+
+    async function loadProjects() {
+
+      try {
+
+        const {
+          data,
+          error
+        } = await sb
+          .from('projects')
+          .select('*')
+          .order(
+            'created_at',
+            {
+              ascending: false
+            }
+          );
+
+
+        if (error) throw error;
+
+
+        const list =
+          document.getElementById(
+            'projectsList'
+          );
+
+
+        const count =
+          document.getElementById(
+            'projectCount'
+          );
+
+
+        list.innerHTML = '';
+
+
+        const projectTotal =
+          data ? data.length : 0;
+
+
+        count.textContent =
+          `${projectTotal} ${
+            projectTotal === 1
+              ? 'Project'
+              : 'Projects'
+          }`;
+
+
+        if (!data || data.length === 0) {
+
+          list.innerHTML = `
+
+            <div
+              class="empty-state"
+              style="grid-column:1/-1;"
+            >
+
+              <div class="empty-state-icon">
+                📁
+              </div>
+
+              No projects yet.
+
+            </div>
+
+          `;
+
+          return;
+
+        }
+
+
+        data.forEach(p => {
+
+          const thumbnail =
+            p.thumbnail_url
+              ? escapeHtml(p.thumbnail_url)
+              : '';
+
+
+          const thumbHTML =
+            thumbnail
+
+              ? `
+                <img
+                  src="${thumbnail}"
+                  class="project-thumb"
+                  alt="Project thumbnail"
+                  onerror="
+                    this.src='https://via.placeholder.com/85x65?text=No+Image'
+                  "
+                >
+              `
+
+              : `
+                <div
+                  class="project-thumb"
+                  style="
+                    display:flex;
+                    align-items:center;
+                    justify-content:center;
+                    color:#64748b;
+                    font-size:.7rem;
+                  "
+                >
+                  No Image
+                </div>
+              `;
+
+
+          list.innerHTML += `
+
+            <div class="project-card">
+
+              ${thumbHTML}
+
+
+              <div class="project-info">
+
+                <div class="project-title">
+                  ${escapeHtml(p.title || 'Untitled')}
+                </div>
+
+
+                <span class="project-category">
+                  ${escapeHtml(p.category || 'Uncategorized')}
+                </span>
+
+
+                <a
+                  href="${escapeHtml(p.video_url || '#')}"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="project-url"
+                >
+                  ${escapeHtml(p.video_url || 'No video URL')}
+                </a>
+
+              </div>
+
+
+              <div class="project-actions">
+
+                <button
+                  class="edit-btn"
+                  onclick="editProject(${p.id})"
+                >
+                  ✏️ Edit
+                </button>
+
+
+                <button
+                  class="delete-btn"
+                  onclick="deleteProject(${p.id})"
+                >
+                  🗑️ Delete
+                </button>
+
+              </div>
+
+            </div>
+
+          `;
+
+        });
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showError(
+          'Error loading projects: ' +
+          error.message
+        );
+
+      }
+
+    }
+
+
+    /* =========================
+       EDIT PROJECT
+    ========================== */
+
+    window.editProject = async (id) => {
+
+      try {
+
+        const {
+          data,
+          error
+        } = await sb
+          .from('projects')
+          .select('*')
+          .eq('id', id)
+          .single();
+
+
+        if (error) throw error;
+
+
+        if (!data) {
+
+          showError(
+            'Project not found.'
+          );
+
+          return;
+
+        }
+
+
+        editingProjectId = data.id;
+
+
+        document.getElementById(
+          'title'
+        ).value =
+          data.title || '';
+
+
+        document.getElementById(
+          'category'
+        ).value =
+          data.category || '';
+
+
+        document.getElementById(
+          'description'
+        ).value =
+          data.description || '';
+
+
+        document.getElementById(
+          'videoUrl'
+        ).value =
+          data.video_url || '';
+
+
+        document.getElementById(
+          'thumbnailUrl'
+        ).value =
+          data.thumbnail_url || '';
+
+
+        document.getElementById(
+          'formTitle'
+        ).textContent =
+          'Edit Project';
+
+
+        document.getElementById(
+          'submitBtn'
+        ).textContent =
+          'Update Project';
+
+
+        document.getElementById(
+          'cancelEditBtn'
+        ).style.display =
+          'block';
+
+
+        document.getElementById(
+          'editNote'
+        ).style.display =
+          'block';
+
+
+        document
+          .querySelector('.panel')
+          .scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+          });
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showError(
+          'Error loading project: ' +
+          error.message
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       CANCEL EDIT
+    ========================== */
+
+    document
+      .getElementById('cancelEditBtn')
+      .addEventListener(
+        'click',
+        cancelEdit
+      );
+
+
+    function cancelEdit() {
+
+      editingProjectId = null;
+
+
+      document
+        .getElementById('uploadForm')
+        .reset();
+
+
+      document.getElementById(
+        'formTitle'
+      ).textContent =
+        'Add New Project';
+
+
+      document.getElementById(
+        'submitBtn'
+      ).textContent =
+        'Add Project';
+
+
+      document.getElementById(
+        'cancelEditBtn'
+      ).style.display =
+        'none';
+
+
+      document.getElementById(
+        'editNote'
+      ).style.display =
+        'none';
+
+    }
+
+
+    /* =========================
+       DELETE
+    ========================== */
+
+    window.deleteProject = async (id) => {
+
+      if (
+        !confirm(
+          'Are you sure you want to delete this project?'
+        )
+      ) {
+        return;
+      }
+
+
+      try {
+
+        const {
+          error
+        } = await sb
+          .from('projects')
+          .delete()
+          .eq(
+            'id',
+            id
+          );
+
+
+        if (error) throw error;
+
+
+        if (
+          editingProjectId === id
+        ) {
+
+          cancelEdit();
+
+        }
+
+
+        showSuccess(
+          '✓ Project deleted.'
+        );
+
+
+        loadProjects();
+
+
+      } catch (error) {
+
+        console.error(error);
+
+        showError(
+          'Error deleting project: ' +
+          error.message
+        );
+
+      }
+
+    };
+
+
+    /* =========================
+       ESCAPE HTML
+    ========================== */
+
+    function escapeHtml(value) {
+
+      return String(value)
+
+        .replace(
+          /&/g,
+          '&amp;'
+        )
+
+        .replace(
+          /</g,
+          '&lt;'
+        )
+
+        .replace(
+          />/g,
+          '&gt;'
+        )
+
+        .replace(
+          /"/g,
+          '&quot;'
+        )
+
+        .replace(
+          /'/g,
+          '&#039;'
+        );
+
+    }
+
+
+    /* =========================
+       MESSAGES
+    ========================== */
+
+    function showSuccess(msg) {
+
+      const el =
+        document.getElementById(
+          'successMsg'
+        );
+
+
+      el.textContent = msg;
+
+      el.style.display = 'block';
+
+
+      setTimeout(() => {
+
+        el.style.display = 'none';
+
+      }, 3000);
+
+    }
+
+
+    function showError(msg) {
+
+      const el =
+        document.getElementById(
+          'errorMsg'
+        );
+
+
+      el.textContent = msg;
+
+      el.style.display = 'block';
+
+
+      setTimeout(() => {
+
+        el.style.display = 'none';
+
+      }, 5000);
+
+    }
+
+
+    /* =========================
+       INITIALIZE
+    ========================== */
+
+    if (
+      localStorage.getItem(
+        'adminLoggedIn'
+      ) === 'true'
+    ) {
+
+      showDashboard();
+
+    } else {
+
+      showLogin();
+
+    }
+
+  </script>
+
+</body>
+</html>
+```
